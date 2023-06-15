@@ -11,6 +11,9 @@ namespace labclothingcollection.Models
         public string Nome { get; set; }
 
         [Required]
+        public string Genero { get; set; }
+
+        [Required]
         public string Nascimento { get; set; }
 
         [Required]

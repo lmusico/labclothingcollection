@@ -11,7 +11,7 @@ namespace labclothingcollection.Models
         public string Tipo { get; set; }
 
         [Required]
-        public bool Status { get; set; }
+        public string Status { get; set; }
 
     }
 }
