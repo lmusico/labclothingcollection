@@ -18,21 +18,45 @@ namespace labclothingcollection.Controllers
 
         // GET api/<UsuariosController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            Usuario usuario = MockUsuarios.usuario.FirstOrDefault(x=> x.Identificador == id);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(usuario);
         }
 
         // POST api/<UsuariosController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Usuario usuario)
         {
+            MockUsuarios.usuario.Add(usuario);
+
+            return CreatedAtAction(nameof(Get), new {id = usuario.Identificador}, usuario);
         }
 
         // PUT api/<UsuariosController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] Usuario usuario)
         {
+            Usuario usuarioUpdate = MockUsuarios.usuario.FirstOrDefault(x => x.Identificador == id);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            var index = MockUsuarios.usuario.IndexOf(usuarioUpdate);
+
+            if (index != -1)
+            {
+                MockUsuarios.usuario[index] = usuario;
+            }
+            return NoContent();
         }
 
         // DELETE api/<UsuariosController>/5

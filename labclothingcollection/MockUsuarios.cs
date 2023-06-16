@@ -8,7 +8,7 @@ namespace labclothingcollection
         {
             new Usuario
             {
-                Id = 1,
+                Identificador = 1,
                 Email = "teste@teste.com",
                 Tipo = "Administrador",
                 Status = "Ativo",
@@ -20,7 +20,7 @@ namespace labclothingcollection
             },
             new Usuario
             {
-                Id = 2,
+                Identificador = 2,
                 Email = "exemplo@example.com",
                 Tipo = "Gerente",
                 Status = "Ativo",
@@ -32,7 +32,7 @@ namespace labclothingcollection
             },
             new Usuario
             {
-                Id = 3,
+                Identificador = 3,
                 Email = "usuario@dominio.com",
                 Tipo = "Criador",
                 Status = "Inativo",
@@ -43,7 +43,7 @@ namespace labclothingcollection
                 Telefone = "456789123"
             },
             new Usuario {
-                Id = 4,
+                Identificador = 4,
                 Email = "exemplo2@example.com",
                 Tipo = "Outro",
                 Status = "Ativo",
