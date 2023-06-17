@@ -61,8 +61,20 @@ namespace labclothingcollection.Controllers
 
         // DELETE api/<UsuariosController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            Usuario usuarioUpdate = MockUsuarios.usuario.FirstOrDefault(x => x.Identificador == id);
+
+            if (usuarioUpdate == null)
+            {
+                return NotFound();
+            }
+
+            MockUsuarios.usuario.Remove(usuarioUpdate);
+
+            return NoContent();
+
+
         }
     }
 }

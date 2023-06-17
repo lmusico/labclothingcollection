@@ -14,7 +14,7 @@ namespace labclothingcollection
                 Status = "Ativo",
                 Nome = "João da Silva",
                 Genero = "masculino",
-                Nascimento = "15/10/1990",
+                Nascimento = new DateTime(1990,10,15),
                 Cpf = "365412365",
                 Telefone = "9512328"
             },
@@ -26,7 +26,7 @@ namespace labclothingcollection
                 Status = "Ativo",
                 Nome = "Maria Souza",
                 Genero = "feminino",
-                Nascimento = "20/05/1985",
+                Nascimento = new DateTime(1985,05,20),
                 Cpf = "874596321",
                 Telefone = "987654321"
             },
@@ -38,7 +38,7 @@ namespace labclothingcollection
                 Status = "Inativo",
                 Nome = "Pedro Santos",
                 Genero = "masculino",
-                Nascimento = "05/09/1998",
+                Nascimento = new DateTime(1998,9,5),
                 Cpf = "123456789",
                 Telefone = "456789123"
             },
@@ -49,7 +49,7 @@ namespace labclothingcollection
                 Status = "Ativo",
                 Nome = "Ana Rodrigues",
                 Genero = "feminino",
-                Nascimento = "12/03/1987",
+                Nascimento = new DateTime(1987,3,12),
                 Cpf = "987654321",
                 Telefone = "321654987"
             }
