@@ -11,6 +11,7 @@ namespace labclothingcollection.Controllers
     {
         // GET: api/<UsuariosController>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IEnumerable<Usuario> Get()
         {
             return MockUsuarios.usuario;
@@ -18,6 +19,8 @@ namespace labclothingcollection.Controllers
 
         // GET api/<UsuariosController>/5
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get(int id)
         {
             Usuario usuario = MockUsuarios.usuario.FirstOrDefault(x=> x.Identificador == id);
@@ -32,6 +35,7 @@ namespace labclothingcollection.Controllers
 
         // POST api/<UsuariosController>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public IActionResult Post([FromBody] Usuario usuario)
         {
             MockUsuarios.usuario.Add(usuario);
@@ -41,6 +45,8 @@ namespace labclothingcollection.Controllers
 
         // PUT api/<UsuariosController>/5
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult Put(int id, [FromBody] Usuario usuario)
         {
             Usuario usuarioUpdate = MockUsuarios.usuario.FirstOrDefault(x => x.Identificador == id);
@@ -61,6 +67,8 @@ namespace labclothingcollection.Controllers
 
         // DELETE api/<UsuariosController>/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult Delete(int id)
         {
             Usuario usuarioUpdate = MockUsuarios.usuario.FirstOrDefault(x => x.Identificador == id);
