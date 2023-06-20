@@ -1,5 +1,8 @@
-﻿using labclothingcollection.Models;
+﻿using labclothingcollection.Context;
+using labclothingcollection.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -9,21 +12,30 @@ namespace labclothingcollection.Controllers
     [ApiController]
     public class UsuariosController : ControllerBase
     {
+
+        private readonly labclothingcollectionContext _context;
+
+        public UsuariosController(labclothingcollectionContext context)
+        {
+            _context = context;
+        }
+
         // GET: api/<UsuariosController>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IEnumerable<Usuario> Get()
+        public async Task<IActionResult> Get()
         {
-            return MockUsuarios.usuario;
+            var usuarios = await _context.Usuarios.ToListAsync().ConfigureAwait(true);
+            return Ok(usuarios);
         }
 
         // GET api/<UsuariosController>/5
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            Usuario usuario = MockUsuarios.usuario.FirstOrDefault(x=> x.Identificador == id);
+            Usuario usuario = await _context.Usuarios.FirstOrDefaultAsync(x=> x.Identificador == id).ConfigureAwait(true);
 
             if (usuario == null)
             {
@@ -36,9 +48,11 @@ namespace labclothingcollection.Controllers
         // POST api/<UsuariosController>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public IActionResult Post([FromBody] Usuario usuario)
+        public async Task<IActionResult> Post([FromBody] Usuario usuario)
         {
-            MockUsuarios.usuario.Add(usuario);
+            _context.Usuarios.Add(usuario);
+
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(Get), new {id = usuario.Identificador}, usuario);
         }
@@ -47,21 +61,19 @@ namespace labclothingcollection.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public IActionResult Put(int id, [FromBody] Usuario usuario)
+        public async Task<IActionResult> Put(int id, [FromBody] Usuario usuario)
         {
-            Usuario usuarioUpdate = MockUsuarios.usuario.FirstOrDefault(x => x.Identificador == id);
 
-            if (usuario == null)
+            bool existeUsuario = await _context.Usuarios.AnyAsync(x => x.Identificador == id).ConfigureAwait(true);
+
+            if (!existeUsuario)
             {
                 return NotFound();
             }
 
-            var index = MockUsuarios.usuario.IndexOf(usuarioUpdate);
+            _context.Entry(usuario).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
-            if (index != -1)
-            {
-                MockUsuarios.usuario[index] = usuario;
-            }
             return NoContent();
         }
 
@@ -69,19 +81,21 @@ namespace labclothingcollection.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            Usuario usuarioUpdate = MockUsuarios.usuario.FirstOrDefault(x => x.Identificador == id);
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(x => x.Identificador == id);
 
-            if (usuarioUpdate == null)
+
+            if (usuario == null)
             {
                 return NotFound();
             }
 
-            MockUsuarios.usuario.Remove(usuarioUpdate);
+            _context.Usuarios.Remove(usuario);
+
+            await _context.SaveChangesAsync();
 
             return NoContent();
-
 
         }
     }
