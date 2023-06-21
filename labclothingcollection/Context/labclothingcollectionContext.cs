@@ -12,6 +12,12 @@ namespace labclothingcollection.Context
         public labclothingcollectionContext() { }
 
         public virtual DbSet<Usuario> Usuarios { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Usuario>().HasData(
+                MockUsuarios.usuario
+                );
+        }
         public virtual DbSet<Colecao> Colecoes { get; set; }
         public virtual DbSet<Modelo> Modelos { get; set; }
 

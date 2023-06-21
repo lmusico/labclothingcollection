@@ -39,7 +39,7 @@ namespace labclothingcollection.Controllers
 
             if (usuario == null)
             {
-                return NotFound();
+                return NotFound("Id fornecido não foi encontrado.");
             }
 
             return Ok(usuario);
@@ -50,6 +50,13 @@ namespace labclothingcollection.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Post([FromBody] Usuario usuario)
         {
+            bool existeCpf = _context.Usuarios.Any(x => x.Cpf == usuario.Cpf);
+
+            if (existeCpf)
+            {
+                return Conflict("O CPF informado já existe no banco de dados.");
+            }
+
             _context.Usuarios.Add(usuario);
 
             await _context.SaveChangesAsync();
