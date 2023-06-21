@@ -13,9 +13,9 @@ namespace labclothingcollection.Models
         [StringLength(50)]
         public string Nome { get; set;}
 
-        [ForeignKey("Usuarios")]
         public int UsuarioId { get; set; }
-        public virtual Usuario Usuarios { get; set; }
+        [ForeignKey("UsuarioId")]
+        public Usuario? Usuario { get; set; }
 
         [Required]
         [StringLength(50)]

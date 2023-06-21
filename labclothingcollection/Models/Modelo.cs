@@ -12,9 +12,9 @@ namespace labclothingcollection.Models
         [StringLength(100)]
         public string Nome { get; set; }
 
-        [ForeignKey("Colecoes")]
+        [ForeignKey("ColecaoId")]
         public int ColecaoId { get; set;}
-        public virtual Colecao Colecoes { get; set; }
+        public Colecao? Colecao { get; set; }
 
         [Required]
         [StringLength(20)]

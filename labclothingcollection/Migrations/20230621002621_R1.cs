@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace labclothingcollection.Migrations
 {
     /// <inheritdoc />
-    public partial class MigrationR0 : Migration
+    public partial class R1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

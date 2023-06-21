@@ -16,7 +16,10 @@ builder.Services.AddDbContext<labclothingcollectionContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("ServerConnection")));
 builder.Services.AddControllers().AddNewtonsoftJson(
     x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
+builder.Services.AddControllers().AddNewtonsoftJson(
+    x => x.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore);
+//builder.Services.AddControllers(options =>
+//    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

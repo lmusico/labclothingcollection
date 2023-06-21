@@ -12,8 +12,8 @@ using labclothingcollection.Context;
 namespace labclothingcollection.Migrations
 {
     [DbContext(typeof(labclothingcollectionContext))]
-    [Migration("20230620003725_MigrationR0")]
-    partial class MigrationR0
+    [Migration("20230621002621_R1")]
+    partial class R1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -155,24 +155,24 @@ namespace labclothingcollection.Migrations
 
             modelBuilder.Entity("labclothingcollection.Models.Colecao", b =>
                 {
-                    b.HasOne("labclothingcollection.Models.Usuario", "Usuarios")
+                    b.HasOne("labclothingcollection.Models.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Usuarios");
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("labclothingcollection.Models.Modelo", b =>
                 {
-                    b.HasOne("labclothingcollection.Models.Colecao", "Colecoes")
+                    b.HasOne("labclothingcollection.Models.Colecao", "Colecao")
                         .WithMany()
                         .HasForeignKey("ColecaoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Colecoes");
+                    b.Navigation("Colecao");
                 });
 #pragma warning restore 612, 618
         }
