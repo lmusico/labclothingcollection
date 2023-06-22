@@ -81,6 +81,27 @@ namespace labclothingcollection.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}/status")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> PutStatus(int id, string status)
+        {
+
+            Colecao colecao = await _context.Colecoes.FirstOrDefaultAsync(x => x.Identificador == id).ConfigureAwait(true);
+
+            if (colecao == null)
+            {
+                return NotFound("Id fornecido não foi encontrado.");
+            }
+
+            colecao.Status = status;
+
+            _context.Entry(colecao).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         // POST: api/Colecoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]

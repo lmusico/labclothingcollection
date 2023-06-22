@@ -50,7 +50,7 @@ namespace labclothingcollection.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Post([FromBody] Usuario usuario)
         {
-            bool existeCpf = _context.Usuarios.Any(x => x.Cpf == usuario.Cpf);
+            bool existeCpf = await _context.Usuarios.AnyAsync(x => x.Cpf == usuario.Cpf);
 
             if (existeCpf)
             {
@@ -68,15 +68,65 @@ namespace labclothingcollection.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Put(int id, [FromBody] Usuario usuario)
+        public async Task<IActionResult> PutDados(int id, [FromBody] UsuarioDados usuario)
         {
 
-            bool existeUsuario = await _context.Usuarios.AnyAsync(x => x.Identificador == id).ConfigureAwait(true);
+            Usuario usuarioUpdate = await _context.Usuarios.FirstOrDefaultAsync(x => x.Identificador == id).ConfigureAwait(true);
 
-            if (!existeUsuario)
+            if (usuarioUpdate == null)
             {
-                return NotFound();
+                return NotFound("Id fornecido não foi encontrado.");
             }
+
+            if (usuario.Nome != null)
+            {
+                usuarioUpdate.Nome = usuario.Nome;
+            }
+
+            if (usuario.Genero != null)
+            {
+                usuarioUpdate.Genero = usuario.Genero;
+            }
+
+            if (usuario.Nascimento != new DateTime (0001,01,01,00,00,00))
+            {
+                usuarioUpdate.Nascimento = usuario.Nascimento;
+            }
+
+            if (usuario.Telefone != null)
+            {
+                usuarioUpdate.Telefone = usuario.Telefone;
+            }
+
+            if (usuario.Tipo != null)
+            {
+                usuarioUpdate.Tipo = usuario.Tipo;
+            }
+
+
+            _context.Entry(usuarioUpdate).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            Console.WriteLine(usuarioUpdate.Nascimento);
+
+            return NoContent();
+        }
+
+        // PUT api/<UsuariosController>/5
+        [HttpPut("{id}/status")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> PutStatus(int id, string status)
+        {
+
+            Usuario usuario = await _context.Usuarios.FirstOrDefaultAsync(x => x.Identificador == id).ConfigureAwait(true);
+
+            if (usuario == null)
+            {
+                return NotFound("Id fornecido não foi encontrado.");
+            }
+
+            usuario.Status = status;
 
             _context.Entry(usuario).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -84,7 +134,9 @@ namespace labclothingcollection.Controllers
             return NoContent();
         }
 
+
         // DELETE api/<UsuariosController>/5
+        /*
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -105,5 +157,6 @@ namespace labclothingcollection.Controllers
             return NoContent();
 
         }
+        */
     }
 }
