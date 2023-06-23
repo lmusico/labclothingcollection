@@ -23,6 +23,8 @@ namespace labclothingcollection.Controllers
 
         // GET: api/Colecoes
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetColecoes([FromQuery] string? status)
         {
 
@@ -38,6 +40,8 @@ namespace labclothingcollection.Controllers
 
         // GET: api/Colecoes/5
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Colecao>> GetColecao(int id)
         {
           if (_context.Colecoes == null)
@@ -57,6 +61,9 @@ namespace labclothingcollection.Controllers
         // PUT: api/Colecoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+
         public async Task<IActionResult> PutColecao(int id, Colecao colecao)
         {
             if (id != colecao.Identificador)
@@ -109,6 +116,7 @@ namespace labclothingcollection.Controllers
         // POST: api/Colecoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<Colecao>> PostColecao(Colecao colecao)
         {
           if (_context.Colecoes == null)
@@ -123,6 +131,8 @@ namespace labclothingcollection.Controllers
 
         // DELETE: api/Colecoes/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteColecao(int id)
         {
             if (_context.Colecoes == null)

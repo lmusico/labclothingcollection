@@ -23,6 +23,8 @@ namespace labclothingcollection.Controllers
 
         // GET: api/Modelos
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetModelos([FromQuery] string? layout)
         {
 
@@ -37,6 +39,8 @@ namespace labclothingcollection.Controllers
 
         // GET: api/Modelos/5
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Modelo>> GetModelo(int id)
         {
           if (_context.Modelos == null)
@@ -56,6 +60,8 @@ namespace labclothingcollection.Controllers
         // PUT: api/Modelos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> PutModelo(int id, Modelo modelo)
         {
             if (id != modelo.Identificador)
@@ -87,6 +93,7 @@ namespace labclothingcollection.Controllers
         // POST: api/Modelos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Modelo>> PostModelo(Modelo modelo)
         {
           if (_context.Modelos == null)
@@ -101,6 +108,8 @@ namespace labclothingcollection.Controllers
 
         // DELETE: api/Modelos/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteModelo(int id)
         {
             if (_context.Modelos == null)
