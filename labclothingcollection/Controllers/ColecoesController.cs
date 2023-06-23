@@ -23,13 +23,17 @@ namespace labclothingcollection.Controllers
 
         // GET: api/Colecoes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Colecao>>> GetColecoes()
+        public async Task<IActionResult> GetColecoes([FromQuery] string? status)
         {
+
+          List<Colecao> colecoes = await _context.Colecoes.Where(x => status != null ? x.Status == status : x.Status != null).ToListAsync();
+          
+
           if (_context.Colecoes == null)
           {
               return NotFound();
           }
-            return await _context.Colecoes.ToListAsync();
+            return Ok(colecoes);
         }
 
         // GET: api/Colecoes/5
@@ -129,6 +133,18 @@ namespace labclothingcollection.Controllers
             if (colecao == null)
             {
                 return NotFound();
+            }
+
+            if (colecao.Status == "Ativa")
+            {
+                return StatusCode(403, "Essa coleção está ativa portanto não pode ser deletada");
+            }
+
+            bool existeModelo = await _context.Modelos.AnyAsync(x => x.ColecaoId == colecao.Identificador);
+
+            if (existeModelo)
+            {
+                return StatusCode(403, "Essa coleção possui modelos atrelados e não pode ser deletada");
             }
 
             _context.Colecoes.Remove(colecao);
