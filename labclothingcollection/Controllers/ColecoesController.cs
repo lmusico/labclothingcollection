@@ -10,7 +10,7 @@ using labclothingcollection.Models;
 
 namespace labclothingcollection.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/colecoes")]
     [ApiController]
     public class ColecoesController : ControllerBase
     {
@@ -117,12 +117,24 @@ namespace labclothingcollection.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<Colecao>> PostColecao(Colecao colecao)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> PostColecao(Colecao colecao)
         {
           if (_context.Colecoes == null)
           {
               return Problem("Entity set 'labclothingcollectionContext.Colecoes'  is null.");
           }
+
+          if(colecao.Estacao != "Outono" && colecao.Estacao != "Inverno" && colecao.Estacao != "Primavera" && colecao.Estacao != "Verão")
+            {
+                return BadRequest("O campo estação deve ser Outono, Inverno, Primavera ou Verão");
+            }
+
+          if (colecao.Status != "Ativa" && colecao.Status != "Inativa")
+            {
+                return BadRequest("O campo Status deve ser Ativa ou Inativa");
+            }
+
             _context.Colecoes.Add(colecao);
             await _context.SaveChangesAsync();
 

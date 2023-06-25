@@ -23,9 +23,10 @@ namespace labclothingcollection.Controllers
         // GET: api/<UsuariosController>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] string? status)
         {
-            var usuarios = await _context.Usuarios.ToListAsync().ConfigureAwait(true);
+            List<Usuario> usuarios = await _context.Usuarios.Where(x => status != null ? x.Status == status : x.Status != null).ToListAsync();
+
             return Ok(usuarios);
         }
 
@@ -48,6 +49,8 @@ namespace labclothingcollection.Controllers
         // POST api/<UsuariosController>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Post([FromBody] Usuario usuario)
         {
             bool existeCpf = await _context.Usuarios.AnyAsync(x => x.Cpf == usuario.Cpf);
@@ -55,6 +58,16 @@ namespace labclothingcollection.Controllers
             if (existeCpf)
             {
                 return Conflict("O CPF informado já existe no banco de dados.");
+            }
+
+            if (usuario.Tipo != "Administrador" && usuario.Tipo != "Gerente" && usuario.Tipo != "Criador" && usuario.Tipo != "Outro")
+            {
+                return BadRequest("O campo Tipo deve ser Administrador, Gerente, Criador ou Outro");
+            }
+
+            if (usuario.Status != "Ativo" && usuario.Status != "Inativo")
+            {
+                return BadRequest("O campo Status deve ser Ativo ou Inativo");
             }
 
             _context.Usuarios.Add(usuario);
@@ -134,29 +147,5 @@ namespace labclothingcollection.Controllers
             return NoContent();
         }
 
-
-        // DELETE api/<UsuariosController>/5
-        /*
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(x => x.Identificador == id);
-
-
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-            _context.Usuarios.Remove(usuario);
-
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-
-        }
-        */
     }
 }

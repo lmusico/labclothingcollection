@@ -10,7 +10,7 @@ using labclothingcollection.Models;
 
 namespace labclothingcollection.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/modelos")]
     [ApiController]
     public class ModelosController : ControllerBase
     {
@@ -58,7 +58,6 @@ namespace labclothingcollection.Controllers
         }
 
         // PUT: api/Modelos/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -90,6 +89,27 @@ namespace labclothingcollection.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}/status")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> PutStatus(int id, string layout)
+        {
+
+            Modelo modelo = await _context.Modelos.FirstOrDefaultAsync(x => x.Identificador == id).ConfigureAwait(true);
+
+            if (modelo == null)
+            {
+                return NotFound("Id fornecido não foi encontrado.");
+            }
+
+            modelo.LayoutPeca = layout;
+
+            _context.Entry(modelo).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         // POST: api/Modelos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -100,14 +120,28 @@ namespace labclothingcollection.Controllers
         {
             bool existeModelo = await _context.Modelos.AnyAsync(x => x.Nome == modelo.Nome);
 
+            if (_context.Modelos == null)
+            {
+                return Problem("Entity set 'labclothingcollectionContext.Modelos' is null.");
+            }
+
             if (existeModelo)
             {
                 return Conflict("Já existe um modelo criado com o nome informado.");
             }
-            if (_context.Modelos == null)
-          {
-              return Problem("Entity set 'labclothingcollectionContext.Modelos' is null.");
-          }
+
+            if (modelo.TipoPeca != "Bermuda" && modelo.TipoPeca != "Biquini" && modelo.TipoPeca != "Bolsa" && modelo.TipoPeca != "Boné" && modelo.TipoPeca != "Calça"
+                && modelo.TipoPeca != "Calçados" && modelo.TipoPeca != "Camisa" && modelo.TipoPeca != "Chapéu" && modelo.TipoPeca != "Saia")
+            {
+                return BadRequest("O campo TipoPeca deve ser Bermuda, Biquini, Bolsa, Boné, Calça, Calçados, Camisa, Chapéu ou Saia");
+            }
+
+            if (modelo.LayoutPeca != "Bordado" && modelo.LayoutPeca != "Estampa" && modelo.LayoutPeca != "Liso")
+            {
+                return BadRequest("O campo LayoutPeca deve ser Bordado, Estampa ou Liso");
+            }
+
+
             _context.Modelos.Add(modelo);
             await _context.SaveChangesAsync();
 
