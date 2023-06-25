@@ -93,12 +93,20 @@ namespace labclothingcollection.Controllers
         // POST: api/Modelos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Modelo>> PostModelo(Modelo modelo)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> PostModelo(Modelo modelo)
         {
-          if (_context.Modelos == null)
+            bool existeModelo = await _context.Modelos.AnyAsync(x => x.Nome == modelo.Nome);
+
+            if (existeModelo)
+            {
+                return Conflict("Já existe um modelo criado com o nome informado.");
+            }
+            if (_context.Modelos == null)
           {
-              return Problem("Entity set 'labclothingcollectionContext.Modelos'  is null.");
+              return Problem("Entity set 'labclothingcollectionContext.Modelos' is null.");
           }
             _context.Modelos.Add(modelo);
             await _context.SaveChangesAsync();
