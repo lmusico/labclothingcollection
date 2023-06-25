@@ -89,10 +89,10 @@ namespace labclothingcollection.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}/status")]
+        [HttpPut("{id}/layout")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> PutStatus(int id, string layout)
+        public async Task<IActionResult> PutLayout(int id, string layout)
         {
 
             Modelo modelo = await _context.Modelos.FirstOrDefaultAsync(x => x.Identificador == id).ConfigureAwait(true);
